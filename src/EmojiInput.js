@@ -430,6 +430,62 @@ class EmojiInput extends React.PureComponent {
           borderRadius: 6,
         }}
       >
+        {enableSearch && (
+          <View
+            style={{
+              backgroundColor: this.props.categoryBackgroundColor,
+              paddingTop: 8,
+            }}
+          >
+            <TextInput
+              ref={(input) => {
+                this.textInput = input;
+              }}
+              placeholderTextColor={"#A0A0A2"}
+              style={{
+                backgroundColor: "white",
+                borderColor: "#A0A0A2",
+                borderWidth: 0.5,
+                color: "black",
+                fontSize: responsiveFontSize(1.5),
+                padding: 6,
+                paddingLeft: 15,
+                borderRadius: 5,
+                margin: 10,
+              }}
+              returnKeyType={"search"}
+              clearButtonMode={"always"}
+              placeholder={"Search Emoji ..."}
+              autoCorrect={false}
+              onChangeText={(text) => {
+                this.setState({
+                  searchQuery: text,
+                });
+                if (text.length) {
+                  if (text.length > this.state.previousLongestQuery.length) {
+                    this.setState({
+                      previousLongestQuery: text,
+                    });
+                  }
+                } else {
+                  if (this.loggingFunction) {
+                    if (this.verboseLoggingFunction) {
+                      this.loggingFunction(
+                        this.state.previousLongestQuery,
+                        "previousLongestQuery"
+                      );
+                    } else {
+                      this.loggingFunction(this.state.previousLongestQuery);
+                    }
+                  }
+                  this.setState({
+                    previousLongestQuery: "",
+                  });
+                }
+              }}
+            />
+          </View>
+        )}
         {
           //!this.state.searchQuery &&
           this.props.showCategoryTab && (
@@ -472,55 +528,6 @@ class EmojiInput extends React.PureComponent {
             </TouchableWithoutFeedback>
           )
         }
-        {enableSearch && (
-          <TextInput
-            ref={(input) => {
-              this.textInput = input;
-            }}
-            placeholderTextColor={"#A0A0A2"}
-            style={{
-              backgroundColor: "white",
-              borderColor: "#A0A0A2",
-              borderWidth: 0.5,
-              color: "black",
-              fontSize: responsiveFontSize(1.5),
-              padding: 6,
-              paddingLeft: 15,
-              borderRadius: 15,
-              margin: 10,
-            }}
-            returnKeyType={"search"}
-            clearButtonMode={"always"}
-            placeholder={"Search"}
-            autoCorrect={false}
-            onChangeText={(text) => {
-              this.setState({
-                searchQuery: text,
-              });
-              if (text.length) {
-                if (text.length > this.state.previousLongestQuery.length) {
-                  this.setState({
-                    previousLongestQuery: text,
-                  });
-                }
-              } else {
-                if (this.loggingFunction) {
-                  if (this.verboseLoggingFunction) {
-                    this.loggingFunction(
-                      this.state.previousLongestQuery,
-                      "previousLongestQuery"
-                    );
-                  } else {
-                    this.loggingFunction(this.state.previousLongestQuery);
-                  }
-                }
-                this.setState({
-                  previousLongestQuery: "",
-                });
-              }
-            }}
-          />
-        )}
         {this.state.emptySearchResult && (
           <View style={styles.emptySearchResultContainer}>
             <Text>No search results.</Text>
@@ -678,7 +685,7 @@ const styles = {
     fontWeight: "bold",
   },
   categoryText: {
-    color: "black",
+    color: "#A0A0A2", //
     fontWeight: "bold",
     paddingVertical: 10,
     paddingLeft: 10,
