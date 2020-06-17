@@ -434,56 +434,72 @@ class EmojiInput extends React.PureComponent {
           <View
             style={{
               backgroundColor: this.props.categoryBackgroundColor,
-              paddingTop: 8,
+              paddingTop: 17,
+              borderRadius: 6,
+              paddingBottom: 8,
             }}
           >
-            <TextInput
-              ref={(input) => {
-                this.textInput = input;
-              }}
-              placeholderTextColor={"#A0A0A2"}
+            <View
               style={{
-                backgroundColor: "white",
-                borderColor: "#A0A0A2",
+                flexDirection: "row",
+                borderColor: "#DEDEE1",
                 borderWidth: 0.5,
-                color: "black",
-                fontSize: responsiveFontSize(1.5),
-                padding: 6,
-                paddingLeft: 15,
-                borderRadius: 5,
-                margin: 10,
+                backgroundColor: "white",
+                marginHorizontal: 15,
               }}
-              returnKeyType={"search"}
-              clearButtonMode={"always"}
-              placeholder={"Search Emoji ..."}
-              autoCorrect={false}
-              onChangeText={(text) => {
-                this.setState({
-                  searchQuery: text,
-                });
-                if (text.length) {
-                  if (text.length > this.state.previousLongestQuery.length) {
+            >
+              <Icon
+                name="magnify"
+                type="material-community"
+                color="#828282"
+                containerStyle={{ paddingLeft: 2 }}
+                size={28}
+              />
+              <TextInput
+                ref={(input) => {
+                  this.textInput = input;
+                }}
+                placeholderTextColor="#565656"
+                style={{
+                  flex: 1,
+                  backgroundColor: "white",
+                  color: "black",
+                  fontSize: responsiveFontSize(1.5),
+                  paddingLeft: 5,
+                  margin: 0.5,
+                }}
+                returnKeyType={"search"}
+                clearButtonMode={"always"}
+                placeholder={"Search Emoji..."}
+                autoCorrect={false}
+                onChangeText={(text) => {
+                  this.setState({
+                    searchQuery: text,
+                  });
+                  if (text.length) {
+                    if (text.length > this.state.previousLongestQuery.length) {
+                      this.setState({
+                        previousLongestQuery: text,
+                      });
+                    }
+                  } else {
+                    if (this.loggingFunction) {
+                      if (this.verboseLoggingFunction) {
+                        this.loggingFunction(
+                          this.state.previousLongestQuery,
+                          "previousLongestQuery"
+                        );
+                      } else {
+                        this.loggingFunction(this.state.previousLongestQuery);
+                      }
+                    }
                     this.setState({
-                      previousLongestQuery: text,
+                      previousLongestQuery: "",
                     });
                   }
-                } else {
-                  if (this.loggingFunction) {
-                    if (this.verboseLoggingFunction) {
-                      this.loggingFunction(
-                        this.state.previousLongestQuery,
-                        "previousLongestQuery"
-                      );
-                    } else {
-                      this.loggingFunction(this.state.previousLongestQuery);
-                    }
-                  }
-                  this.setState({
-                    previousLongestQuery: "",
-                  });
-                }
-              }}
-            />
+                }}
+              />
+            </View>
           </View>
         )}
         {
@@ -494,6 +510,7 @@ class EmojiInput extends React.PureComponent {
                 style={[
                   styles.footerContainer,
                   { backgroundColor: `${this.props.categoryBackgroundColor}` },
+                  { borderBottomWidth: 1, borderBottomColor: "#D2D2D2" },
                 ]}
               >
                 {_.drop(
